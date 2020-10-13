@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sidecar-injector
+  labels:
+    app: sidecar-injector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sidecar-injector
+  template:
+    metadata:
+      labels:
+        app: sidecar-injector
+    spec:
+      containers:
+        - name: sidecar-injector
+          image: localhost:5000/krvarma/sidecar-injector:latest
+          imagePullPolicy: Always
+          args:
+            - -certDir=/etc/webhook/certs
+            - -sidecarConfig=/etc/webhook/config/sidecarconfig.yaml
+            - -port=8443
+          volumeMounts:
+            - name: webhook-certs
+              mountPath: /etc/webhook/certs
+              readOnly: true
+            - name: webhook-config
+              mountPath: /etc/webhook/config
+      volumes:
+        - name: webhook-certs
+          secret:
+            secretName: sidecar-injector-certs
+        - name: webhook-config
+          configMap:
+            name: sidecar-injector-configmap

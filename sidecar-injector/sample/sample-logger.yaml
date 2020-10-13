@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loggerclient-deployment
+  labels:
+    app: loggerclient
+  annotations:
+    webhook-annotate: "true"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loggerclient
+  template:
+    metadata:
+      labels:
+        app: loggerclient
+      annotations:
+        inject-logging-sidecar: "true"
+    spec:
+      containers:
+      - name: loggerclient
+        image: localhost:5000/krvarma/logclient:latest
+        env:
+        - name: LOG_SERVER
+          value: "http://localhost"
+        - name: LOG_PORT
+          value: "8082"

@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sidecar-injector-service
+  labels:
+    app: sidecar-injector
+spec:
+  ports:
+  - port: 8443
+    targetPort: 8443
+  selector:
+    app: sidecar-injector
+---
+apiVersion: admissionregistration.k8s.io/v1beta1
+kind: MutatingWebhookConfiguration
+metadata:
+  creationTimestamp: null
+  name: sidecar-injector-configuration
+  annotations:
+    cert-manager.io/inject-ca-from: default/selfsigned-cert
+webhooks:
+- clientConfig:
+    caBundle: Cg==
+    service:
+      name: sidecar-injector-service  
+      path: /mutate
+      port: 8443
+      namespace: "default"
+  sideEffects: None
+  admissionReviewVersions: ["v1beta1"]
+  failurePolicy: Fail
+  name: mpod.kb.io
+  rules:
+  - apiGroups:
+    - ""
+    apiVersions:
+    - v1
+    operations:
+    - CREATE
+    - UPDATE
+    resources:
+    - pods
+    scope: "Namespaced"

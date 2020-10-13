@@ -1,0 +1,27 @@
+# Install cert-manager
+kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.yaml
+
+// Build docker image
+make docker-build IMG=localhost:5000/krvarma/sidecar-injector:latest
+// Build and push docker image
+make docker-build docker-push IMG=localhost:5000/krvarma/sidecar-injector:latest
+
+// Deploy certificates
+make deploy-cert
+// Deploy sidecar config
+make deploy-sidecarconfig
+// Deploy webhook, service and mutatingwebhook
+make deploy
+// Uninstall all except certs
+make uninstall
+// Get events
+kubectl get events -w
+// Get pods
+kubectl get pods
+// Deploy sample deployment
+kubectl apply -f sample-logger.yaml
+// Delete sample deployment
+kubectl delete -f sample-logger.yaml
+
+// List repos
+curl -X GET http://localhost:5000/v2/_catalog
