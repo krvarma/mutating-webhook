@@ -1,6 +1,6 @@
 # Extending Kubernetes — Part 2 — Mutating Webhook
 
-![enter image description here](https://raw.githubusercontent.com/krvarma/mutating-webhook/master/images/extending_kubernetes_mutating_webhook.png?token=AA46XG5KJN3Q3R7DKQEMH4S7R3I7C)
+![enter image description here](https://raw.githubusercontent.com/krvarma/mutating-webhook/master/images/extending_kubernetes_mutating_webhook.png?token=AA46XG3KLIZ2ROIABPDJMDK7UEGXE)
 
 Extending Kubernetes is a series of articles that explore different options available to extend the Kubernetes system's functionality. The series discusses some of the methods to extend the functionality of Kubernetes.
 
